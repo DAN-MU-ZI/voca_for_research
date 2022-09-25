@@ -69,11 +69,8 @@ def render_sequence_meshes(audio_fname, sequence_vertices, template, out_path, u
     if not os.path.exists(out_path):
         os.makedirs(out_path)
 
-    tmp_video_file = tempfile.NamedTemporaryFile('w', suffix='.mp4', dir=out_path)
-    if int(cv2.__version__[0]) < 3:
-        writer = cv2.VideoWriter(tmp_video_file.name, cv2.cv.CV_FOURCC(*'mp4v'), 60, (800, 800), True)
-    else:
-        writer = cv2.VideoWriter(tmp_video_file.name, cv2.VideoWriter_fourcc(*'mp4v'), 60, (800, 800), True)
+    tempfileName = 'test.mp4'
+    tester = cv2.VideoWriter(tempfileName, cv2.VideoWriter_fourcc(*'mp4v'), 60, (800, 800), True)
     if os.path.exists(uv_template_fname) and os.path.exists(texture_img_fname):
         uv_template = Mesh(filename=uv_template_fname)
         vt, ft = uv_template.vt, uv_template.ft
@@ -89,10 +86,10 @@ def render_sequence_meshes(audio_fname, sequence_vertices, template, out_path, u
         if vt is not None and ft is not None:
             render_mesh.vt, render_mesh.ft = vt, ft
         img = render_mesh_helper(render_mesh, center, tex_img=tex_img)
-        writer.write(img)
-    writer.release()
+        tester.write(img)
+    tester.release()
     video_fname = os.path.join(out_path, 'video.mp4')
-    os.system('ffmpeg -i {} -i {} -ac 2 {}'.format(audio_fname, tmp_video_file.name, video_fname))
+    os.system('ffmpeg -i {} -i {} -ac 2 {}'.format(audio_fname, tempfileName, video_fname))
 
 
 def inference(tf_model_fname, ds_fname, audio_fname, template_fname, condition_idx, out_path, render_sequence=True, uv_template_fname='', texture_img_fname=''):
