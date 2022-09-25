@@ -42,7 +42,7 @@ def fc_layer(inputs,
                                   shape=weights_shape,
                                   initializer=weights_initializer,
                                   trainable=trainable,
-                                  regularizer=tf.contrib.layers.l2_regularizer(scale=regularisation_constant))
+                                  regularizer=tf.keras.regularizers.l2(regularisation_constant))
 
         bias_shape = [num_units_out, ]
         bias_initializer = tf.constant_initializer(bias)
@@ -79,7 +79,7 @@ def custom_fc_layer(inputs,
                                   shape=weights_shape,
                                   initializer=weights_initializer,
                                   trainable=trainable_weights,
-                                  regularizer=tf.contrib.layers.l2_regularizer(scale=regularisation_constant))
+                                  regularizer=tf.keras.regularizers.l2(regularisation_constant))
 
         bias_shape = [num_units_out, ]
         bias_initializer = tf.constant_initializer(bias)
@@ -135,7 +135,7 @@ def conv2d(inputs, n_filters,
         w = tf.get_variable('weights',
                             [k_h, k_w, inputs.get_shape()[-1], n_filters],
                             initializer=tf.truncated_normal_initializer(stddev=stddev),
-                            regularizer=tf.contrib.layers.l2_regularizer(scale=regularisation_constant))
+                            regularizer=tf.keras.regularizers.l2(regularisation_constant))
         conv = tf.nn.conv2d(inputs,
                             w,
                             strides=[1, stride_h, stride_w, 1],
@@ -158,12 +158,12 @@ class BatchNorm(object):
             self.name = name
 
     def __call__(self, x, reuse=False, is_training=True):
-        return tf.contrib.layers.batch_norm(x,
-                                            decay=self.momentum,
-                                            updates_collections=None,
+        return tf.keras.layers.BatchNormalization(momentum=self.momentum,
+                                            #updates_collections=None,
                                             epsilon=self.epsilon,
                                             center=True,
                                             scale=True,
-                                            is_training=is_training,
-                                            reuse=reuse,
-                                            scope=self.name)
+                                            #is_training=is_training,
+                                            #reuse=reuse,
+                                            #scope=self.
+                                            )(x)
