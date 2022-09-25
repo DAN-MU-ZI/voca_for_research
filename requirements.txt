@@ -4,11 +4,11 @@ chumpy
 opencv-python
 resampy
 python-speech-features
-tensorflow-gpu==1.15.2
+tensorflow-gpu==2.6
 scikit-learn
 image
 ipython
 matplotlib
 trimesh
 pyrender
-
+keras==2.6
