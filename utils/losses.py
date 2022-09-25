@@ -18,7 +18,8 @@ For comments or questions, please email us at voca@tue.mpg.de
 from __future__ import absolute_import
 from __future__ import division
 
-import tensorflow as tf
+import tensorflow.compat.v1 as tf 
+tf.disable_v2_behavior()
 
 def reconstruction_loss(predicted, real, want_absolute_loss=True, want_in_mm=False, weights=None):
     if weights is not None:

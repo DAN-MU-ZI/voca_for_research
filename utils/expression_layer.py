@@ -16,7 +16,8 @@ For comments or questions, please email us at voca@tue.mpg.de
 '''
 
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf 
+tf.disable_v2_behavior()
 from utils.ops import fc_layer
 
 class ExpressionLayer:

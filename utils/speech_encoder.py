@@ -15,7 +15,8 @@ More information about VOCA is available at http://voca.is.tue.mpg.de.
 For comments or questions, please email us at voca@tue.mpg.de
 '''
 
-import tensorflow as tf
+import tensorflow.compat.v1 as tf 
+tf.disable_v2_behavior()
 from utils.ops import fc_layer, conv2d, BatchNorm
 
 class SpeechEncoder:

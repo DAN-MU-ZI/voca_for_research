@@ -21,7 +21,8 @@ import glob
 import shutil
 import subprocess
 import configparser
-import tensorflow as tf
+import tensorflow.compat.v1 as tf 
+tf.disable_v2_behavior()
 
 from config_parser import read_config, create_default_config
 from utils.data_handler import DataHandler

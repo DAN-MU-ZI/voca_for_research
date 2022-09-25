@@ -18,7 +18,8 @@ For comments or questions, please email us at voca@tue.mpg.de
 import os
 import logging
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf 
+tf.disable_v2_behavior()
 
 class BaseModel(object):
     def __init__(self, session, batcher, config, scope='default'):
