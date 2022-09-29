@@ -100,7 +100,8 @@ def inference(tf_model_fname, ds_fname, audio_fname, template_fname, condition_i
         print('Audio has multiple channels, only first channel is considered')
         audio = audio[:,0]
 
-    processed_audio = process_audio(ds_fname, audio, sample_rate)
+    audio_mfcc = np.squeeze(np.load('mel.npy',allow_pickle=True)).T
+    processed_audio = process_audio(ds_fname, audio_mfcc, 16000)
 
     gd = tf.MetaGraphDef()
     with open(tf_model_fname + '.meta', "rb") as f:

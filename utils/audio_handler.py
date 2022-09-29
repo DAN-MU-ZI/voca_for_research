@@ -56,12 +56,9 @@ class AudioHandler:
             raise NotImplementedError("Audio features not supported")
 
     def convert_to_deepspeech(self, audio):
-        def audioToInputVector(audio, fs, numcep, numcontext):
-            # Get mfcc coefficients
-            features = mfcc(audio, samplerate=fs, numcep=numcep)
-
+        def audioToInputVector(mfcc, fs, numcep, numcontext):
             # We only keep every second feature (BiRNN stride = 2)
-            features = features[::2]
+            features = mfcc[::2,2::3]
 
             # One stride per time step in the input
             num_strides = len(features)
@@ -114,7 +111,7 @@ class AudioHandler:
                     print('process audio: %s - %s' % (subj, seq))
 
                     audio_sample = audio[subj][seq]['audio']
-                    sample_rate = audio[subj][seq]['sample_rate']
+                    sample_rate = audio[subj][seq]['sample_rate'] # 16000
                     resampled_audio = resampy.resample(audio_sample.astype(float), sample_rate, 16000)
                     input_vector = audioToInputVector(resampled_audio.astype('int16'), 16000, n_input, n_context)
 
@@ -122,7 +119,7 @@ class AudioHandler:
                                                                   seq_length: [input_vector.shape[0]]})
 
                     # Resample network output from 50 fps to 60 fps
-                    audio_len_s = float(audio_sample.shape[0]) / sample_rate
+                    audio_len_s = float(audio_sample.shape[0]*160) / sample_rate
                     num_frames = int(round(audio_len_s * 60))
                     network_output = interpolate_features(network_output[:, 0], 50, 60,
                                                           output_len=num_frames)
